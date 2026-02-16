@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9KKMBJ9B4Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9KKMBJ9B4Z');
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Livestreaming – HIGHLANDMEDIA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff;
+      --off-white: #e8e4dd;
+      --red: #c0392b;
+      --red-dark: #a93226;
+      --dark: #0a0a0a;
+      --modal-bg: #141414;
+      --input-bg: #1e1e1e;
+      --border: rgba(255,255,255,0.1);
+    }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--dark);
+      font-family: 'Barlow', sans-serif;
+      overflow: hidden;
+    }
+    .collage { position: fixed; inset: 0; z-index: 0; }
+    .collage img {
+      position: absolute; object-fit: cover;
+      border: 3px solid var(--dark);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .p-grand        { top: -1%; left: -1%;  width: 28%; height: 42%; object-position: center center; z-index: 2; }
+    .p-mba          { top: -1%; left: 26%;  width: 36%; height: 38%; object-position: center center; z-index: 2; }
+    .p-honey-aud    { top: -1%; left: 60%;  width: 42%; height: 32%; object-position: center 60%; z-index: 2; }
+    .p-honey-desk   { top: 34%; left: -1%;  width: 24%; height: 38%; object-position: center center; }
+    .p-honey-chairs { top: 33%; left: 21%;  width: 42%; height: 46%; object-position: 20% center; z-index: 1; }
+    .p-prod-table   { top: 33%; left: 61%;  width: 24%; height: 38%; object-position: center center; }
+    .p-gallo-edge   { top: 31%; left: 83%;  width: 19%; height: 36%; object-position: center center; }
+    .p-hazy-conf    { top: 63%; left: -1%;  width: 22%; height: 40%; object-position: center 20%; }
+    .p-sdi          { top: 65%; left: 19%;  width: 30%; height: 38%; object-position: center center; }
+    .p-theater      { top: 61%; left: 47%;  width: 30%; height: 42%; object-position: center center; }
+    .p-gallo-col    { top: 64%; left: 75%;  width: 27%; height: 39%; object-position: center center; }
+    .overlay {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(to top,  rgba(0,0,0,0.90) 0%, rgba(0,0,0,0.25) 38%, transparent 56%),
+        linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 22%),
+        linear-gradient(to bottom, rgba(0,0,0,0.72) 0%, transparent 18%),
+        linear-gradient(to top,    rgba(0,0,0,0.72) 0%, transparent 18%);
+    }
+    .accent-line { position: fixed; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red); z-index: 20; }
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      animation: fadeDown 0.9s ease both;
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .logo-link { text-decoration: none; }
+    .logo-img { height: 84px; width: auto; display: block; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.7)); transition: opacity 0.2s; }
+    .logo-link:hover .logo-img { opacity: 0.72; }
+    .header-right {
+      font-weight: 300; font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--off-white); opacity: 0.85;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+    }
+    .header-right span { margin: 0 10px; opacity: 0.4; }
+    .hero {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
+      padding: 0 48px 72px;
+      animation: fadeUp 1s ease 0.4s both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .eyebrow { font-weight: 600; font-size: 0.68rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--red); margin-bottom: 8px; }
+    .headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6.5vw, 6rem);
+      line-height: 0.9; letter-spacing: 0.02em; color: var(--white);
+      text-shadow: 0 4px 24px rgba(0,0,0,0.6); margin-bottom: 20px;
+    }
+    .bottom-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .sub {
+      font-weight: 300; font-size: clamp(0.82rem, 1.2vw, 0.96rem);
+      color: var(--off-white); letter-spacing: 0.04em;
+      max-width: 400px; line-height: 1.65;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+    }
+    .cta-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+    .btn-primary {
+      font-weight: 600; font-size: 0.72rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none; color: var(--white);
+      background: var(--red); border: 2px solid var(--red);
+      padding: 13px 30px; cursor: pointer;
+      transition: background 0.22s, color 0.22s; white-space: nowrap;
+    }
+    .btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+    .btn-ghost {
+      font-weight: 400; font-size: 0.72rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none; color: var(--off-white);
+      border-bottom: 1px solid rgba(232,228,221,0.35); padding-bottom: 2px;
+      transition: color 0.22s, border-color 0.22s; white-space: nowrap;
+    }
+    .btn-ghost:hover { color: var(--white); border-color: var(--white); }
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--modal-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      width: 100%; max-width: 560px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 44px 40px 40px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.28s ease;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.4); font-size: 1.4rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-eyebrow {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 6px;
+    }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem; letter-spacing: 0.03em; color: var(--white);
+      margin-bottom: 28px; line-height: 1;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    input, select, textarea {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.88rem; font-weight: 300;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }
+    input:focus, select:focus, textarea:focus { border-color: var(--red); }
+    select { appearance: none; cursor: pointer; }
+    select option { background: #1e1e1e; }
+    textarea { resize: vertical; min-height: 90px; }
+    .form-submit {
+      margin-top: 24px; width: 100%;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600; font-size: 0.75rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--white);
+      background: var(--red); border: 2px solid var(--red);
+      padding: 15px; cursor: pointer;
+      transition: background 0.22s, color 0.22s;
+    }
+    .form-submit:hover { background: var(--red-dark); border-color: var(--red-dark); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .success-msg { display: none; text-align: center; padding: 20px 0; }
+    .success-msg .checkmark { font-size: 2.4rem; margin-bottom: 14px; }
+    .success-msg h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; color: var(--white); margin-bottom: 8px;
+    }
+    .success-msg p {
+      font-size: 0.88rem; font-weight: 300;
+      color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+
+    footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 15;
+      padding: 10px 48px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+    }
+    .footer-inner {
+      display: flex; flex-direction: row;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-services {
+      font-size: 0.62rem; font-weight: 400; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45);
+    }
+    .footer-services a { color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.2s; }
+    .footer-services a:hover { color: var(--white); }
+    .footer-copy {
+      font-size: 0.58rem; font-weight: 300; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.25);
+    }
+    @media (max-width: 640px) {
+      header { padding: 18px 24px; }
+      .header-right { display: none; }
+      .hero { padding: 0 24px 36px; }
+      .modal { padding: 36px 24px 28px; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="accent-line"></div>
+
+  <div class="collage">
+    <img class="p-grand"        src="photos/photo2.jpg"  alt="" />
+    <img class="p-mba"          src="photos/photo5.jpg"  alt="" />
+    <img class="p-honey-aud"    src="photos/photo11.jpg" alt="" />
+    <img class="p-honey-desk"   src="photos/photo6.jpg"  alt="" />
+    <img class="p-honey-chairs" src="photos/photo7.jpg"  alt="" />
+    <img class="p-prod-table"   src="photos/photo3.jpg"  alt="" />
+    <img class="p-gallo-edge"   src="photos/photo10.jpg" alt="" />
+    <img class="p-hazy-conf"    src="photos/photo9.jpg"  alt="" />
+    <img class="p-sdi"          src="photos/photo8.jpg"  alt="" />
+    <img class="p-theater"      src="photos/photo1.jpg"  alt="" />
+    <img class="p-gallo-col"    src="photos/photo4.jpg"  alt="" />
+  </div>
+
+  <div class="overlay"></div>
+
+  <header>
+    <a href="https://www.highlandmediaservices.com" class="logo-link" aria-label="Highland Media – Home">
+      <img src="../assets/img/LOGO.png" alt="Highland Media" class="logo-img" />
+    </a>
+    <div class="header-right">Live Event Production <span>|</span> Rochester, NY</div>
+  </header>
+
+  <div class="hero">
+    <p class="eyebrow">Professional Livestreaming</p>
+    <h1 class="headline">Broadcast<br>Your Event<br>Live.</h1>
+    <div class="bottom-row">
+      <p class="sub">Seamless multi-camera production with full audio, presentation, and hybrid event technology — all managed under one team.</p>
+      <div class="cta-row">
+        <button class="btn-primary" onclick="openModal()">Get a Quote</button>
+        <a href="https://www.highlandmediaservices.com/services" class="btn-ghost">View All Services</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="backdropClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+
+      <p class="modal-eyebrow">HIGHLANDMEDIA</p>
+      <h2 class="modal-title" id="modalTitle">Request a Quote</h2>
+
+      <div id="formWrap">
+        <form id="quoteForm" class="form-grid">
+          <input type="hidden" name="subject" id="subjectField" value="New Quote Request – HIGHLANDMEDIA" />
+
+          <div class="form-group">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" name="first_name" placeholder="Jane" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name *</label>
+            <input type="text" id="lname" name="last_name" placeholder="Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="(585) 555-0100" />
+          </div>
+          <div class="form-group">
+            <label for="event_date">Event Date</label>
+            <input type="date" id="event_date" name="event_date" />
+          </div>
+          <div class="form-group">
+            <label for="event_type">Event Type</label>
+            <select id="event_type" name="event_type">
+              <option value="" disabled selected>Select one…</option>
+              <option>Conference / Corporate</option>
+              <option>Gala / Fundraiser</option>
+              <option>Concert / Performance</option>
+              <option>Worship / House of Worship</option>
+              <option>Hybrid Event</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="venue">Venue / Location</label>
+            <input type="text" id="venue" name="venue" placeholder="Venue name or city" />
+          </div>
+          <div class="form-group full">
+            <label for="message">Tell us about your event</label>
+            <textarea id="message" name="message" placeholder="Expected attendance, streaming platform, any special requirements…"></textarea>
+          </div>
+          <div class="form-group full">
+            <button type="submit" class="form-submit" id="submitBtn">Send Request</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="checkmark">✔</div>
+        <h3>Request Received!</h3>
+        <p>Thanks for reaching out. We'll be in touch within one business day to discuss your event.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('fname').addEventListener('input', updateSubject);
+    document.getElementById('lname').addEventListener('input', updateSubject);
+    function updateSubject() {
+      const first = document.getElementById('fname').value.trim();
+      const last  = document.getElementById('lname').value.trim();
+      const name  = [first, last].filter(Boolean).join(' ');
+      document.getElementById('subjectField').value = name
+        ? 'New Quote Request from ' + name + ' – HIGHLANDMEDIA'
+        : 'New Quote Request – HIGHLANDMEDIA';
+    }
+    function openModal() {
+      document.getElementById('modalBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function backdropClick(e) {
+      if (e.target === document.getElementById('modalBackdrop')) closeModal();
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+    document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      const data = new FormData(this);
+      try {
+        const res = await fetch('https://formspree.io/f/mbdaokvy', {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('formWrap').style.display = 'none';
+          document.getElementById('successMsg').style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Send Request';
+          alert('Something went wrong. Please try again or email us directly.');
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send Request';
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-services">Audio &middot; Video &middot; Lighting &middot; Streaming &middot; Hybrid Events &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.highlandmediaservices.com">highlandmediaservices.com</a> &nbsp;&nbsp;|&nbsp;&nbsp; (585) 210-2350</p>
+      <p class="footer-copy">&copy; 2025 Highland Media Services</p>
+    </div>
+  </footer>
+
+<!-- Highland Media Services Analytics — paste before </body> -->
+<script>
+(function() {
+    let sessionId = sessionStorage.getItem('hms_sid');
+    if (!sessionId) {
+        sessionId = 'sid_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+        sessionStorage.setItem('hms_sid', sessionId);
+    }
+    fetch('/api/hms/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, path: window.location.pathname, referer: document.referrer || 'Direct' })
+    }).catch(() => {});
+    setInterval(() => {
+        fetch('/api/hms/heartbeat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+        }).catch(() => {});
+    }, 10000);
+    document.addEventListener('click', () => {
+        fetch('/api/hms/track-nav', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+        }).catch(() => {});
+    });
+})();
+</script>
+<!-- End Analytics -->
+</body>
+</html>

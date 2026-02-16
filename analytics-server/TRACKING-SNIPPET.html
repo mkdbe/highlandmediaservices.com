@@ -1,0 +1,29 @@
+<!-- Highland Media Services Analytics — paste before </body> -->
+<script>
+(function() {
+    // Track page view
+    fetch('/api/hms/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            path: window.location.pathname,
+            referer: document.referrer || 'Direct'
+        })
+    }).catch(() => {});
+
+    // Heartbeat every 10 seconds to track session duration
+    setInterval(() => {
+        fetch('/api/hms/heartbeat', { method: 'POST' }).catch(() => {});
+    }, 10000);
+
+    // Track clicks/interactions
+    let clicks = 0;
+    document.addEventListener('click', () => {
+        clicks++;
+        if (clicks % 1 === 0) {
+            fetch('/api/hms/track-nav', { method: 'POST' }).catch(() => {});
+        }
+    });
+})();
+</script>
+<!-- End Analytics -->

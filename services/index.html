@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9KKMBJ9B4Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9KKMBJ9B4Z');
+</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services – HIGHLANDMEDIA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --white: #ffffff;
+      --off-white: #e8e4dd;
+      --red: #c0392b;
+      --red-dark: #a93226;
+      --dark: #0a0a0a;
+      --mid: #111111;
+      --border: rgba(255,255,255,0.08);
+    }
+    html, body {
+      min-height: 100%;
+      background: var(--dark);
+      font-family: 'Barlow', sans-serif;
+      color: var(--white);
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+    }
+
+    .accent-line { position: fixed; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red); z-index: 20; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+    .logo-link { text-decoration: none; }
+    .logo-img { height: 84px; width: auto; display: block; filter: drop-shadow(0 2px 10px rgba(0,0,0,0.7)); transition: opacity 0.2s; }
+    .logo-link:hover .logo-img { opacity: 0.72; }
+    .header-right {
+      font-weight: 300; font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--off-white); opacity: 0.85;
+    }
+    .header-right span { margin: 0 10px; opacity: 0.4; }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      position: relative; z-index: 1;
+      padding: 160px 48px 120px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-eyebrow {
+      font-weight: 600; font-size: 0.68rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 12px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.9; letter-spacing: 0.02em;
+      color: var(--white); margin-bottom: 60px;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    /* ── SERVICE GRID ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .service-card {
+      background: var(--dark);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 0; background: var(--red);
+      transition: width 0.3s ease;
+    }
+    .service-card:hover { background: #0f0f0f; }
+    .service-card:hover::before { width: 3px; }
+
+    .service-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.15); margin-bottom: 20px;
+      display: block;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 0.04em;
+      color: var(--white); margin-bottom: 16px;
+      line-height: 1;
+    }
+    .service-desc {
+      font-weight: 300; font-size: 0.88rem;
+      color: rgba(255,255,255,0.5); line-height: 1.75;
+      letter-spacing: 0.02em;
+    }
+    .service-tags {
+      margin-top: 24px;
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .tag {
+      font-size: 0.6rem; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 10px;
+    }
+
+    /* ── CTA STRIP ── */
+    .cta-strip {
+      margin-top: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 24px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s ease 0.4s both;
+    }
+    .cta-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.04em; color: var(--white);
+    }
+    .cta-text em { color: var(--red); font-style: normal; }
+    .btn-primary {
+      font-weight: 600; font-size: 0.72rem; letter-spacing: 0.2em;
+      text-transform: uppercase; text-decoration: none; color: var(--white);
+      background: var(--red); border: 2px solid var(--red);
+      padding: 13px 30px; cursor: pointer;
+      transition: background 0.22s, color 0.22s; white-space: nowrap;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      padding: 14px 48px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex; flex-direction: row;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-services {
+      font-size: 0.62rem; font-weight: 400; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+    }
+    .footer-services a { color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+    .footer-services a:hover { color: var(--white); }
+    .footer-copy {
+      font-size: 0.58rem; font-weight: 300; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.2);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 18px 24px; }
+      .header-right { display: none; }
+      main { padding: 130px 24px 80px; }
+      footer { padding: 14px 24px; }
+      .service-card { padding: 36px 24px; }
+    }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: #141414;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-left: 3px solid var(--red);
+      width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+      padding: 44px 40px 40px;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.28s ease;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.4); font-size: 1.4rem; line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-eyebrow {
+      font-size: 0.65rem; font-weight: 600; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 6px;
+    }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem; letter-spacing: 0.03em; color: var(--white);
+      margin-bottom: 28px; line-height: 1;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    input, select, textarea {
+      background: #1e1e1e;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.88rem; font-weight: 300;
+      padding: 11px 14px; outline: none;
+      transition: border-color 0.2s; width: 100%;
+    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.2); }
+    input:focus, select:focus, textarea:focus { border-color: var(--red); }
+    select { appearance: none; cursor: pointer; }
+    select option { background: #1e1e1e; }
+    textarea { resize: vertical; min-height: 90px; }
+    .form-submit {
+      margin-top: 24px; width: 100%;
+      font-family: 'Barlow', sans-serif;
+      font-weight: 600; font-size: 0.75rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--white);
+      background: var(--red); border: 2px solid var(--red);
+      padding: 15px; cursor: pointer;
+      transition: background 0.22s;
+    }
+    .form-submit:hover { background: var(--red-dark); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .success-msg { display: none; text-align: center; padding: 20px 0; }
+    .success-msg .checkmark { font-size: 2.4rem; margin-bottom: 14px; }
+    .success-msg h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; color: var(--white); margin-bottom: 8px;
+    }
+    .success-msg p {
+      font-size: 0.88rem; font-weight: 300;
+      color: rgba(255,255,255,0.55); line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="accent-line"></div>
+
+  <header>
+    <a href="https://www.highlandmediaservices.com" class="logo-link" aria-label="Highland Media – Home">
+      <img src="../assets/img/LOGO.png" alt="Highland Media" class="logo-img" />
+    </a>
+    <div class="header-right">Live Event Production <span>|</span> Rochester, NY</div>
+  </header>
+
+  <main>
+    <p class="page-eyebrow">What We Do</p>
+    <h1 class="page-title">Our<br>Services.</h1>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <span class="service-number">01</span>
+        <h2 class="service-name">Audio</h2>
+        <p class="service-desc">Full-service sound reinforcement for events of any scale. From intimate corporate meetings to large-scale conferences, we deliver clear, balanced audio that keeps your audience engaged.</p>
+        <div class="service-tags">
+          <span class="tag">Sound Reinforcement</span>
+          <span class="tag">Mixing</span>
+          <span class="tag">Wireless Mics</span>
+          <span class="tag">IEM</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-number">02</span>
+        <h2 class="service-name">Video</h2>
+        <p class="service-desc">Multi-camera video production and switching for live events. We handle everything from camera operation to real-time mixing, ensuring your content looks professional on any screen.</p>
+        <div class="service-tags">
+          <span class="tag">Multi-Camera</span>
+          <span class="tag">Live Switching</span>
+          <span class="tag">Recording</span>
+          <span class="tag">Projection</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-number">03</span>
+        <h2 class="service-name">Lighting</h2>
+        <p class="service-desc">Intelligent lighting design that sets the right mood for your event. Stage wash, accent lighting, and dynamic effects — all programmed and operated by our experienced team.</p>
+        <div class="service-tags">
+          <span class="tag">Stage Wash</span>
+          <span class="tag">LED Fixtures</span>
+          <span class="tag">Programming</span>
+          <span class="tag">Design</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-number">04</span>
+        <h2 class="service-name">Livestreaming</h2>
+        <p class="service-desc">Professional broadcast-quality streaming to any platform. Seamless multi-camera production with real-time encoding, graphics, and technical support so your remote audience never misses a moment.</p>
+        <div class="service-tags">
+          <span class="tag">Multi-Platform</span>
+          <span class="tag">Encoding</span>
+          <span class="tag">Graphics</span>
+          <span class="tag">Technical Support</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-number">05</span>
+        <h2 class="service-name">Hybrid Events</h2>
+        <p class="service-desc">Bridging in-person and remote audiences seamlessly. We integrate live production with interactive virtual components so every attendee — regardless of location — has a first-class experience.</p>
+        <div class="service-tags">
+          <span class="tag">Virtual Integration</span>
+          <span class="tag">Interactive</span>
+          <span class="tag">Remote Speakers</span>
+          <span class="tag">Q&amp;A</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-number">06</span>
+        <h2 class="service-name">Equipment Rentals</h2>
+        <p class="service-desc">Professional AV equipment available for rent with or without our crew. Microphones, speakers, cameras, switchers, and more — all maintained to the highest standard.</p>
+        <div class="service-tags">
+          <span class="tag">Speakers</span>
+          <span class="tag">Cameras</span>
+          <span class="tag">Switchers</span>
+          <span class="tag">Microphones</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="cta-strip">
+      <p class="cta-text">Ready to plan your <em>next event?</em></p>
+      <button class="btn-primary" onclick="openModal()">Get a Quote</button>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p class="footer-services">Audio &middot; Video &middot; Lighting &middot; Streaming &middot; Hybrid Events &nbsp;&nbsp;|&nbsp;&nbsp; <a href="https://www.highlandmediaservices.com">highlandmediaservices.com</a> &nbsp;&nbsp;|&nbsp;&nbsp; (585) 210-2350</p>
+      <p class="footer-copy">&copy; 2025 Highland Media Services</p>
+    </div>
+  </footer>
+
+
+  <!-- MODAL -->
+  <div class="modal-backdrop" id="modalBackdrop" onclick="backdropClick(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <p class="modal-eyebrow">HIGHLANDMEDIA</p>
+      <h2 class="modal-title" id="modalTitle">Get a Quote</h2>
+
+      <div id="formWrap">
+        <form id="quoteForm" class="form-grid">
+          <input type="hidden" name="subject" id="subjectField" value="New Quote Request – HIGHLANDMEDIA" />
+          <div class="form-group">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" name="first_name" placeholder="Jane" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name *</label>
+            <input type="text" id="lname" name="last_name" placeholder="Smith" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="jane@company.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" name="phone" placeholder="(585) 555-0100" />
+          </div>
+          <div class="form-group full">
+            <label for="service">Service Needed</label>
+            <select id="service" name="service">
+              <option value="" disabled selected>Select one…</option>
+              <option>Audio</option>
+              <option>Video</option>
+              <option>Lighting</option>
+              <option>Livestreaming</option>
+              <option>Hybrid Event</option>
+              <option>Equipment Rental</option>
+              <option>Full Production Package</option>
+              <option>Not Sure / Multiple</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="event_date">Event Date</label>
+            <input type="date" id="event_date" name="event_date" />
+          </div>
+          <div class="form-group">
+            <label for="venue">Venue / Location</label>
+            <input type="text" id="venue" name="venue" placeholder="Venue or city" />
+          </div>
+          <div class="form-group full">
+            <label for="message">Tell us about your event</label>
+            <textarea id="message" name="message" placeholder="Expected attendance, any special requirements…"></textarea>
+          </div>
+          <div class="form-group full">
+            <button type="submit" class="form-submit" id="submitBtn">Send Request</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="checkmark">✔</div>
+        <h3>Request Received!</h3>
+        <p>Thanks for reaching out. We'll be in touch within one business day to discuss your event.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('fname').addEventListener('input', updateSubject);
+    document.getElementById('lname').addEventListener('input', updateSubject);
+    function updateSubject() {
+      const first = document.getElementById('fname').value.trim();
+      const last  = document.getElementById('lname').value.trim();
+      const name  = [first, last].filter(Boolean).join(' ');
+      document.getElementById('subjectField').value = name
+        ? 'New Quote Request from ' + name + ' – HIGHLANDMEDIA'
+        : 'New Quote Request – HIGHLANDMEDIA';
+    }
+    function openModal() {
+      document.getElementById('modalBackdrop').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      document.getElementById('modalBackdrop').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function backdropClick(e) {
+      if (e.target === document.getElementById('modalBackdrop')) closeModal();
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+    document.getElementById('quoteForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      const data = new FormData(this);
+      try {
+        const res = await fetch('https://formspree.io/f/mbdaokvy', {
+          method: 'POST', body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          document.getElementById('formWrap').style.display = 'none';
+          document.getElementById('successMsg').style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Send Request';
+          alert('Something went wrong. Please try again.');
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send Request';
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+
+<!-- Highland Media Services Analytics — paste before </body> -->
+<script>
+(function() {
+    let sessionId = sessionStorage.getItem('hms_sid');
+    if (!sessionId) {
+        sessionId = 'sid_' + Date.now() + '_' + Math.random().toString(36).slice(2, 9);
+        sessionStorage.setItem('hms_sid', sessionId);
+    }
+    fetch('/api/hms/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, path: window.location.pathname, referer: document.referrer || 'Direct' })
+    }).catch(() => {});
+    setInterval(() => {
+        fetch('/api/hms/heartbeat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+        }).catch(() => {});
+    }, 10000);
+    document.addEventListener('click', () => {
+        fetch('/api/hms/track-nav', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+        }).catch(() => {});
+    });
+})();
+</script>
+<!-- End Analytics -->
+</body>
+</html>
