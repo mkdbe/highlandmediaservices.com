@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>HIGHLANDMEDIA — MILEAGE</title>
+<link rel="apple-touch-icon" href="/mileage-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+    --bg:      #0e0e0c;
+    --bg2:     #111110;
+    --sidebar: #161614;
+    --surface: #1c1c1a;
+    --surface2: #222220;
+    --surface3: #282826;
+    --border:  rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.04);
+    --text:    #e8e4dc;
+    --muted:   #6a6a62;
+    --dim:     #3a3a36;
+    --red:     #d63b2e;
+    --red-dim: rgba(214,59,46,0.14);
+    --green:   #3d9e5f;
+    --green-dim: rgba(61,158,95,0.15);
+    --amber:   #c8922a;
+    --amber-dim: rgba(200,146,42,0.14);
+    --mono: 'JetBrains Mono', monospace;
+    --cond: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
+}
+html, body { background: var(--bg); color: var(--text); font-family: var(--body); min-height: 100vh; }
+
+/* ── Top bar ── */
+.topbar {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.wordmark {
+    font-family: var(--cond);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+}
+.sync-status {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    min-width: 60px;
+    text-align: right;
+}
+.sync-status.ok   { color: var(--green); }
+.sync-status.warn { color: var(--amber); }
+
+
+    font-family: var(--cond);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-left: 14px;
+    padding-left: 14px;
+    border-left: 1px solid var(--border);
+    text-transform: uppercase;
+}
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.topbar-stat {
+    font-family: var(--cond);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+.topbar-stat strong {
+    font-weight: 700;
+    margin-right: 4px;
+}
+.topbar-stat.t-red strong  { color: var(--red); }
+.topbar-stat.t-green strong { color: var(--green); }
+.topbar-stat.t-amber strong { color: var(--amber); }
+
+/* ── Layout ── */
+.layout {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+    min-height: calc(100vh - 50px);
+}
+@media (max-width: 700px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+/* ── Sidebar ── */
+.sidebar {
+    background: var(--sidebar);
+    border-right: 1px solid var(--border);
+    padding: 0 0 60px;
+}
+.sidebar-tab {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+}
+.tab-btn {
+    flex: 1;
+    font-family: var(--cond);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 13px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+}
+.tab-btn.active { color: var(--text); border-bottom-color: var(--red); }
+
+.form-body { padding: 16px 14px; }
+.form-section { margin-bottom: 14px; }
+.form-label {
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+    display: block;
+}
+.form-label .req { color: var(--red); margin-left: 2px; }
+input[type=text], input[type=date], input[type=number], textarea, select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 13px;
+    padding: 9px 10px;
+    outline: none;
+    -webkit-appearance: none;
+    border-radius: 0;
+    transition: border-color 0.15s;
+}
+input:focus, textarea:focus, select:focus { border-color: rgba(255,255,255,0.18); background: var(--surface2); }
+textarea { resize: vertical; min-height: 58px; }
+select option { background: var(--surface2); }
+
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Stops */
+.stop-row { display: flex; align-items: center; gap: 5px; margin-bottom: 5px; }
+.stop-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--amber);
+    width: 16px;
+    flex-shrink: 0;
+    text-align: center;
+}
+.stop-row input { flex: 1; font-size: 12px; padding: 7px 9px; }
+.icon-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 15px;
+    transition: all 0.15s;
+    line-height: 1;
+}
+.icon-btn:hover { border-color: var(--red); color: var(--red); }
+.add-stop-btn {
+    font-family: var(--cond);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: none;
+    border: 1px dashed var(--dim);
+    color: var(--dim);
+    padding: 6px 10px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 2px;
+}
+.add-stop-btn:hover { border-color: var(--muted); color: var(--muted); }
+
+/* Autocomplete dropdown */
+.autocomplete-wrap {
+    position: relative;
+}
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 50;
+    display: none;
+}
+.autocomplete-dropdown.show {
+    display: block;
+}
+.autocomplete-item {
+    padding: 9px 10px;
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--text);
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.autocomplete-item:hover {
+    background: var(--surface3);
+}
+.autocomplete-item.selected {
+    background: var(--surface3);
+}
+
+/* Trip type */
+.trip-type-row { display: flex; gap: 5px; margin-bottom: 10px; }
+.tt-btn {
+    flex: 1;
+    font-family: var(--cond);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+}
+.tt-btn.active { background: var(--red-dim); border-color: var(--red); color: var(--text); }
+
+/* Mileage preview */
+.calc-preview {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--green);
+    padding: 11px 13px;
+    margin-bottom: 12px;
+    display: none;
+}
+.calc-preview.visible { display: block; }
+.calc-detail {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.9;
+}
+.calc-detail .hi { color: var(--text); }
+
+/* Status */
+.status-bar {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 7px 10px;
+    margin-bottom: 10px;
+    display: none;
+    border-left: 2px solid var(--muted);
+    background: var(--surface);
+    color: var(--muted);
+}
+.status-bar.visible { display: block; }
+.status-bar.error { border-left-color: var(--red); color: #d08080; background: rgba(214,59,46,0.05); }
+
+/* CTA buttons */
+.calc-btn {
+    width: 100%;
+    font-family: var(--cond);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 6px;
+}
+.calc-btn:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
+.add-btn {
+    width: 100%;
+    font-family: var(--cond);
+    font-size: 14px;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: var(--red);
+    border: none;
+    color: #fff;
+    padding: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.add-btn:hover { background: #b83328; }
+.add-btn:disabled { background: var(--surface2); color: var(--dim); cursor: not-allowed; }
+
+/* ── Main content ── */
+.main { background: var(--bg2); padding: 18px; }
+
+/* Stats row — matches inventory stat tiles */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+}
+.stat-cell { background: var(--bg); padding: 14px 16px; }
+.stat-value {
+    font-family: var(--cond);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.stat-value.red   { color: var(--red); }
+.stat-value.green { color: var(--green); }
+.stat-value.amber { color: var(--amber); }
+.stat-label {
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.toolbar-left {
+    font-family: var(--cond);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.toolbar-right { display: flex; gap: 5px; }
+.toolbar-btn {
+    font-family: var(--cond);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.toolbar-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.18); }
+.toolbar-btn.danger:hover { color: var(--red); border-color: var(--red); }
+
+/* Job table — tighter, matches inventory */
+.job-table { width: 100%; border-collapse: collapse; }
+.job-table th {
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    background: var(--bg);
+}
+.job-table td {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--muted);
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--border2);
+    vertical-align: middle;
+}
+.job-table tr:hover td { background: rgba(255,255,255,0.012); }
+.td-client { color: var(--text) !important; font-weight: 500; font-size: 13px !important; }
+.td-miles {
+    font-family: var(--cond) !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    color: var(--green) !important;
+    white-space: nowrap;
+}
+/* Trip type tags — styled like inventory condition badges */
+.trip-tag {
+    display: inline-block;
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--dim);
+    padding: 1px 5px;
+    margin-top: 3px;
+}
+.trip-tag.round { border-color: rgba(61,158,95,0.35); color: var(--green); }
+.trip-tag.oneway { border-color: rgba(200,146,42,0.35); color: var(--amber); }
+
+.del-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--dim);
+    width: 24px; height: 24px;
+    cursor: pointer;
+    font-size: 13px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+}
+.del-btn:hover { border-color: var(--red); color: var(--red); }
+
+.empty-log {
+    padding: 60px 20px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--dim);
+}
+
+/* Edit modal */
+.modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.82);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+    background: var(--sidebar);
+    border: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+}
+.modal-title {
+    font-family: var(--cond);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text);
+}
+.modal-close {
+    background: none; border: none;
+    color: var(--muted); font-size: 18px;
+    cursor: pointer; line-height: 1; padding: 2px 4px;
+    transition: color 0.15s;
+}
+.modal-close:hover { color: var(--red); }
+.modal-body { padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-footer {
+    display: flex; gap: 8px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    justify-content: flex-end;
+}
+.modal-btn {
+    font-family: var(--cond);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 9px 18px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: all 0.15s;
+}
+.modal-btn-cancel { background: none; color: var(--muted); }
+.modal-btn-cancel:hover { color: var(--text); }
+.modal-btn-save { background: var(--red); color: #fff; border-color: var(--red); }
+.modal-btn-save:hover { background: #b83328; }
+.edit-btn {
+    background: none;
+    border: 1px solid var(--border2);
+    color: var(--dim);
+    width: 24px; height: 24px;
+    cursor: pointer;
+    font-size: 11px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    margin-right: 3px;
+}
+.edit-btn:hover { border-color: rgba(200,146,42,0.5); color: var(--amber); }
+
+/* Saved client select label */
+.saved-tag {
+    display: inline-block;
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid rgba(61,158,95,0.4);
+    color: var(--green);
+    padding: 1px 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Main tabs */
+.main-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+}
+.main-tab-btn {
+    font-family: var(--cond);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    padding: 9px 16px;
+    cursor: pointer;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+}
+.main-tab-btn.active { color: var(--text); border-bottom-color: var(--red); }
+.main-tab-btn:hover:not(.active) { color: var(--text); }
+
+/* Dashboard */
+.dash-panel { display: none; }
+.dash-panel.active { display: block; }
+.dash-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+@media (max-width: 600px) { .dash-grid { grid-template-columns: 1fr; } }
+.dash-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 14px;
+}
+.dash-card-title {
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+.dash-card canvas { max-height: 200px; }
+.dash-card-full { grid-column: 1 / -1; }
+.dash-stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+}
+@media (max-width: 500px) { .dash-stat-row { grid-template-columns: repeat(2, 1fr); } }
+.dash-stat { background: var(--bg); padding: 12px 14px; }
+.dash-stat-val {
+    font-family: var(--cond);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 3px;
+}
+.dash-stat-val.red   { color: var(--red); }
+.dash-stat-val.green { color: var(--green); }
+.dash-stat-val.amber { color: var(--amber); }
+.dash-stat-lbl {
+    font-family: var(--cond);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+.top-clients-list { display: flex; flex-direction: column; gap: 8px; }
+.top-client-row { display: flex; align-items: center; gap: 10px; }
+.top-client-name { font-size: 12px; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-client-bar-wrap { flex: 2; background: var(--surface); height: 3px; }
+.top-client-bar { height: 3px; background: var(--green); transition: width 0.4s; }
+.top-client-miles { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+/* Mobile card view */
+@media (max-width: 700px) {
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .stat-value { font-size: 22px; }
+    .job-table thead { display: none; }
+    .job-table tr {
+        display: block;
+        border: 1px solid var(--border);
+        margin-bottom: 6px;
+        background: var(--bg);
+    }
+    .job-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border2);
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    .job-table td::before {
+        content: attr(data-label);
+        font-family: var(--cond);
+        font-size: 9px;
+        letter-spacing: 0.12em;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--dim);
+        flex-shrink: 0;
+        margin-right: 10px;
+    }
+    .job-table td:last-child { border-bottom: none; }
+    .td-miles { font-size: 18px !important; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- Top bar -->
+<div class="topbar">
+    <div style="display:flex;align-items:center">
+        <div class="wordmark">HIGHLANDMEDIA</div>
+        <div class="topbar-sub">MILEAGE TRACKER</div>
+    </div>
+    <div class="topbar-right">
+        <div class="sync-status" id="sync-status"></div>
+        <div class="topbar-stat t-green"><strong id="hdr-miles">0</strong> MI</div>
+        <div class="topbar-stat t-amber"><strong id="hdr-jobs">0</strong> JOBS</div>
+    </div>
+</div>
+
+<div class="layout">
+
+    <!-- ── Sidebar / Form ── -->
+    <div class="sidebar">
+        <div class="sidebar-tab">
+            <button class="tab-btn active">+ ADD JOB</button>
+        </div>
+        <div class="form-body">
+
+            <!-- Client + Date -->
+            <div class="form-section">
+                <label class="form-label">Client / Job Name <span class="req">*</span></label>
+                <div class="client-wrap" style="display:flex;gap:6px">
+                    <div class="autocomplete-wrap" style="flex:1">
+                        <input type="text" id="f-client" placeholder="e.g. Eastman Theatre" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+                            oninput="onClientInput()" onfocus="onClientInput()" onkeydown="handleAutocompleteKeys(event)" onblur="hideAutocomplete()">
+                        <div class="autocomplete-dropdown" id="autocomplete-dropdown"></div>
+                    </div>
+                    <button type="button" onclick="showAllSaved()" style="font-family:var(--cond);font-size:10px;letter-spacing:0.1em;font-weight:700;text-transform:uppercase;background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:0 10px;cursor:pointer;white-space:nowrap;flex-shrink:0" title="Show saved routes">★</button>
+                </div>
+                <div id="saved-routes-wrap" style="display:none;margin-top:6px">
+                    <label class="form-label" style="color:var(--green)">Saved routes — tap to load</label>
+                    <select id="saved-routes-select" onchange="onSavedRouteSelect()" size="1">
+                        <option value="">— select a saved route —</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-section input-row">
+                <div>
+                    <label class="form-label">Date</label>
+                    <input type="date" id="f-date">
+                </div>
+                <div>
+                    <label class="form-label">No. of Trips</label>
+                    <input type="number" id="f-trips" value="1" min="1" max="99">
+                </div>
+            </div>
+
+            <!-- Route stops -->
+            <div class="form-section">
+                <label class="form-label">Route</label>
+                <div id="stops-list">
+                    <div class="stop-row">
+                        <span class="stop-badge">A</span>
+                        <input type="text" id="stop-origin" value="Office" placeholder="Origin">
+                    </div>
+                    <div class="stop-row" id="dest-row">
+                        <span class="stop-badge">B</span>
+                        <input type="text" id="stop-dest" placeholder="Destination address">
+                    </div>
+                </div>
+                <button class="add-stop-btn" onclick="addStop()">+ ADD INTERMEDIATE STOP</button>
+            </div>
+
+            <!-- Trip type -->
+            <div class="form-section">
+                <label class="form-label">Trip Type</label>
+                <div class="trip-type-row">
+                    <button class="tt-btn active" id="tt-round" onclick="setTripType('round')">↩ Round Trip</button>
+                    <button class="tt-btn" id="tt-one" onclick="setTripType('one')">→ One Way</button>
+                </div>
+            </div>
+
+            <!-- Status / preview -->
+            <div class="status-bar" id="status-bar"></div>
+            <div class="calc-preview" id="calc-preview">
+                <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:6px">
+                    <input type="number" id="preview-total-input" step="0.1" min="0"
+                        style="font-family:var(--cond);font-size:36px;font-weight:700;color:var(--text);background:none;border:none;border-bottom:1px solid var(--border);width:110px;padding:0 0 2px;outline:none;"
+                        oninput="onMilesEdit()">
+                    <span style="font-size:16px;color:var(--muted)">mi</span>
+                    <span style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:4px" id="miles-edited-tag" style="display:none"></span>
+                </div>
+                <div class="calc-detail" id="preview-detail"></div>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-section">
+                <label class="form-label">Notes</label>
+                <textarea id="f-notes" placeholder="Setup + strike, venue details…"></textarea>
+            </div>
+
+            <button class="calc-btn" onclick="calcMileage()">CALCULATE MILEAGE</button>
+            <button class="add-btn" id="add-btn" disabled onclick="addJob()">ADD TO LOG</button>
+
+        </div>
+    </div>
+
+    <!-- ── Main / Log ── -->
+    <div class="main">
+
+        <!-- Stats row -->
+        <div class="stats-row">
+            <div class="stat-cell">
+                <div class="stat-value green" id="stat-miles">0.0</div>
+                <div class="stat-label">Total Miles</div>
+            </div>
+            <div class="stat-cell">
+                <div class="stat-value amber" id="stat-jobs">0</div>
+                <div class="stat-label">Jobs</div>
+            </div>
+            <div class="stat-cell">
+                <div class="stat-value red" id="stat-reimb">$0</div>
+                <div class="stat-label">Est. Reimb.</div>
+            </div>
+        </div>
+
+        <!-- Main tabs -->
+        <div class="main-tabs">
+            <button class="main-tab-btn active" onclick="switchTab('log')">JOB LOG</button>
+            <button class="main-tab-btn" onclick="switchTab('dashboard')">DASHBOARD</button>
+        </div>
+
+        <!-- Log panel -->
+        <div class="dash-panel active" id="panel-log">
+            <div class="toolbar">
+                <div class="toolbar-left" id="log-label">JOB LOG</div>
+                <div class="toolbar-right">
+                    <button class="toolbar-btn" onclick="exportCSV()">↓ CSV</button>
+                    <button class="toolbar-btn danger" onclick="clearAll()">CLEAR ALL</button>
+                </div>
+            </div>
+            <div id="log-wrap">
+                <div class="empty-log" id="empty-log">no jobs logged yet</div>
+                <table class="job-table" id="job-table" style="display:none">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Client / Job</th>
+                            <th>Route</th>
+                            <th>Miles</th>
+                            <th>Notes</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="job-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dashboard panel -->
+        <div class="dash-panel" id="panel-dashboard">
+            <div class="dash-stat-row">
+                <div class="dash-stat"><div class="dash-stat-val" id="d-total-mi">0</div><div class="dash-stat-lbl">Total Miles</div></div>
+                <div class="dash-stat"><div class="dash-stat-val" id="d-total-jobs">0</div><div class="dash-stat-lbl">Total Jobs</div></div>
+                <div class="dash-stat"><div class="dash-stat-val" id="d-avg-mi">0</div><div class="dash-stat-lbl">Avg mi/job</div></div>
+                <div class="dash-stat"><div class="dash-stat-val red" id="d-reimb">$0</div><div class="dash-stat-lbl">Est. Reimb.</div></div>
+            </div>
+
+            <div class="dash-grid">
+                <!-- Miles by month -->
+                <div class="dash-card">
+                    <div class="dash-card-title">Miles by Month</div>
+                    <canvas id="chart-monthly"></canvas>
+                </div>
+                <!-- Trip type breakdown -->
+                <div class="dash-card">
+                    <div class="dash-card-title">Trip Type Breakdown</div>
+                    <canvas id="chart-triptype"></canvas>
+                </div>
+                <!-- Top clients -->
+                <div class="dash-card dash-card-full">
+                    <div class="dash-card-title">Top Clients by Miles</div>
+                    <div class="top-clients-list" id="top-clients-list"></div>
+                </div>
+                <!-- Miles by client bar -->
+                <div class="dash-card dash-card-full">
+                    <div class="dash-card-title">Miles per Job (recent 20)</div>
+                    <canvas id="chart-perjob"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Login overlay -->
+
+<!-- Edit modal -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Edit Job</div>
+            <button class="modal-close" onclick="closeEditModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-id">
+            <div class="field">
+                <label class="form-label">Client / Job Name</label>
+                <input type="text" id="edit-client">
+            </div>
+            <div class="modal-row">
+                <div class="field">
+                    <label class="form-label">Date</label>
+                    <input type="date" id="edit-date">
+                </div>
+                <div class="field">
+                    <label class="form-label">Miles</label>
+                    <input type="number" id="edit-miles" step="0.1" min="0">
+                </div>
+            </div>
+            <div class="modal-row">
+                <div class="field">
+                    <label class="form-label">Trip Type</label>
+                    <select id="edit-triptype">
+                        <option value="round">Round Trip</option>
+                        <option value="one">One Way</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label class="form-label">No. of Trips</label>
+                    <input type="number" id="edit-trips" min="1" max="99">
+                </div>
+            </div>
+            <div class="field">
+                <label class="form-label">Destination</label>
+                <input type="text" id="edit-dest">
+            </div>
+            <div class="field">
+                <label class="form-label">Notes</label>
+                <textarea id="edit-notes"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">Cancel</button>
+            <button class="modal-btn modal-btn-save" onclick="saveEdit()">Save Changes</button>
+        </div>
+    </div>
+</div>
+<script>
+const RATE = 0.67;
+
+let jobs = [];
+let savedClients = {};
+let tripType = 'round';
+let extraStops = 0;
+let lastMiles = null;
+let lastRoute = null;
+let dropdownIdx = -1; // unused, kept for compat
+let authed = true;
+
+document.getElementById('f-date').valueAsDate = new Date();
+
+// ── Load all data ─────────────────────────────────────────────────────────────
+async function loadAll() {
+    showSyncStatus('loading…');
+    try {
+        const [jobsRes, routesRes] = await Promise.all([
+            fetch('/api/jobs'),
+            fetch('/api/saved-routes')
+        ]);
+        jobs = await jobsRes.json();
+        // Normalize field names from server (trip_type → tripType)
+        jobs = jobs.map(normalizeJob);
+        savedClients = await routesRes.json();
+        showSyncStatus('', 'ok');
+        render();
+    } catch(e) {
+        showSyncStatus('load failed', 'warn');
+        render();
+    }
+}
+
+function normalizeJob(j) {
+    return {
+        id: j.id,
+        client: j.client,
+        date: j.date,
+        dest: j.dest,
+        route: j.route,
+        miles: j.miles,
+        tripType: j.trip_type || j.tripType || 'round',
+        trips: j.trips,
+        notes: j.notes,
+    };
+}
+
+// ── Save / delete jobs ────────────────────────────────────────────────────────
+async function save() { /* no-op — all writes go direct to API */ }
+
+async function apiAddJob(jobData) {
+    showSyncStatus('saving…');
+    try {
+        const r = await fetch('/api/jobs', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                client: jobData.client,
+                date: jobData.date,
+                dest: jobData.dest,
+                route: jobData.route,
+                miles: jobData.miles,
+                trip_type: jobData.tripType,
+                trips: jobData.trips,
+                notes: jobData.notes,
+            })
+        });
+        const saved = await r.json();
+        jobs.unshift(normalizeJob(saved));
+        showSyncStatus('saved', 'ok');
+        render();
+    } catch { showSyncStatus('save failed', 'warn'); }
+}
+
+async function apiDeleteJob(id) {
+    try {
+        await fetch(`/api/jobs/${id}`, { method: 'DELETE' });
+        jobs = jobs.filter(j => j.id !== id);
+        render();
+    } catch { showSyncStatus('delete failed', 'warn'); }
+}
+
+async function apiUpdateJob(id, data) {
+    showSyncStatus('saving…');
+    try {
+        const r = await fetch(`/api/jobs/${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                client: data.client, date: data.date, dest: data.dest,
+                route: data.route, miles: data.miles,
+                trip_type: data.tripType, trips: data.trips, notes: data.notes
+            })
+        });
+        const updated = await r.json();
+        const idx = jobs.findIndex(j => j.id === id);
+        if (idx !== -1) jobs[idx] = normalizeJob(updated);
+        showSyncStatus('saved', 'ok');
+        render();
+    } catch { showSyncStatus('save failed', 'warn'); }
+}
+
+async function apiSaveClient(job) {
+    const key = `${job.client}||${job.dest || ''}`;
+    savedClients[key] = {
+        client: job.client, dest: job.dest, route: job.route,
+        miles: job.miles, tripType: job.tripType, trips: job.trips,
+    };
+    try {
+        await fetch('/api/saved-routes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                key, client: job.client, dest: job.dest, route: job.route,
+                miles: job.miles, tripType: job.tripType, trips: job.trips,
+            })
+        });
+    } catch { /* silently fail — in-memory copy still works */ }
+}
+
+function showSyncStatus(msg, type) {
+    const el = document.getElementById('sync-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'sync-status' + (type ? ' ' + type : '');
+    if (type === 'ok') setTimeout(() => { el.textContent = ''; el.className = 'sync-status'; }, 2000);
+}
+
+// Load on startup
+loadAll();
+
+
+// ── Saved clients autocomplete ────────────────────────────────────────────────
+const clientInput = document.getElementById('f-client');
+// clientDropdown no longer used (replaced with native select)
+
+function onClientInput() {
+    const val = document.getElementById('f-client').value.trim();
+    const matches = getMatches(val);
+    
+    // Show autocomplete dropdown
+    showAutocomplete(matches);
+    
+    // Also update the saved routes dropdown (hidden by default)
+    const wrap = document.getElementById('saved-routes-wrap');
+    const sel = document.getElementById('saved-routes-select');
+
+    if (matches.length) {
+        populateSavedSelect(sel, matches);
+        // Keep wrap hidden - autocomplete dropdown is the primary interface
+    } else {
+        wrap.style.display = 'none';
+    }
+    resetCalc();
+}
+
+function showAllSaved() {
+    const keys = Object.keys(savedClients);
+    const wrap = document.getElementById('saved-routes-wrap');
+    const sel = document.getElementById('saved-routes-select');
+    if (!keys.length) {
+        alert('No saved routes yet. Add a job first to save a route.');
+        return;
+    }
+    
+    // Show all saved in the autocomplete dropdown
+    showAutocomplete(keys);
+    
+    // Also populate the select dropdown for mobile fallback
+    populateSavedSelect(sel, keys);
+    wrap.style.display = wrap.style.display === 'none' ? 'block' : 'none';
+}
+
+// ── Autocomplete dropdown functions ──
+let selectedAutocompleteIndex = -1;
+
+function showAutocomplete(keys) {
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    selectedAutocompleteIndex = -1;
+    
+    if (!keys || keys.length === 0) {
+        dropdown.classList.remove('show');
+        return;
+    }
+    
+    dropdown.innerHTML = '';
+    keys.forEach((key, index) => {
+        const sc = savedClients[key];
+        const dest = sc.dest ? ` → ${sc.dest}` : '';
+        const tripLabel = sc.tripType === 'round' ? 'round' : 'one way';
+        
+        const item = document.createElement('div');
+        item.className = 'autocomplete-item';
+        item.textContent = `${sc.client || key.split('||')[0]}  ·  ${sc.miles.toFixed(1)} mi  ·  ${tripLabel}${dest}`;
+        item.dataset.key = key;
+        item.dataset.index = index;
+        
+        // Mouse events
+        item.addEventListener('mousedown', function(e) {
+            e.preventDefault(); // Prevent blur from firing
+            applyClient(key);
+            hideAutocomplete();
+        });
+        
+        item.addEventListener('mouseenter', function() {
+            selectedAutocompleteIndex = index;
+            updateAutocompleteSelection();
+        });
+        
+        dropdown.appendChild(item);
+    });
+    
+    dropdown.classList.add('show');
+}
+
+function hideAutocomplete() {
+    setTimeout(() => {
+        const dropdown = document.getElementById('autocomplete-dropdown');
+        dropdown.classList.remove('show');
+        selectedAutocompleteIndex = -1;
+    }, 200); // Delay to allow click to register
+}
+
+function updateAutocompleteSelection() {
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    const items = dropdown.querySelectorAll('.autocomplete-item');
+    items.forEach((item, index) => {
+        item.classList.toggle('selected', index === selectedAutocompleteIndex);
+    });
+}
+
+function handleAutocompleteKeys(e) {
+    const dropdown = document.getElementById('autocomplete-dropdown');
+    if (!dropdown.classList.contains('show')) return;
+    
+    const items = dropdown.querySelectorAll('.autocomplete-item');
+    if (items.length === 0) return;
+    
+    switch(e.key) {
+        case 'ArrowDown':
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.min(selectedAutocompleteIndex + 1, items.length - 1);
+            updateAutocompleteSelection();
+            items[selectedAutocompleteIndex]?.scrollIntoView({ block: 'nearest' });
+            break;
+            
+        case 'ArrowUp':
+            e.preventDefault();
+            selectedAutocompleteIndex = Math.max(selectedAutocompleteIndex - 1, 0);
+            updateAutocompleteSelection();
+            items[selectedAutocompleteIndex]?.scrollIntoView({ block: 'nearest' });
+            break;
+            
+        case 'Enter':
+            if (selectedAutocompleteIndex >= 0 && selectedAutocompleteIndex < items.length) {
+                e.preventDefault();
+                const key = items[selectedAutocompleteIndex].dataset.key;
+                applyClient(key);
+                hideAutocomplete();
+            }
+            break;
+            
+        case 'Escape':
+            e.preventDefault();
+            hideAutocomplete();
+            break;
+    }
+}
+// ── End autocomplete functions ──
+
+
+function populateSavedSelect(sel, keys) {
+    sel.innerHTML = '<option value="">— select a saved route —</option>';
+    keys.forEach(key => {
+        const sc = savedClients[key];
+        const dest = sc.dest ? ` → ${sc.dest}` : '';
+        const tripLabel = sc.tripType === 'round' ? 'round' : 'one way';
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = `${sc.client || key.split('||')[0]}  ·  ${sc.miles.toFixed(1)} mi  ·  ${tripLabel}${dest}`;
+        sel.appendChild(opt);
+    });
+}
+
+function onSavedRouteSelect() {
+    const key = document.getElementById('saved-routes-select').value;
+    if (!key) return;
+    applyClient(key);
+}
+
+function getMatches(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) return [];
+    return Object.keys(savedClients).filter(k => {
+        const clientName = savedClients[k].client || k.split('||')[0];
+        return clientName.toLowerCase().includes(q);
+    }).sort();
+}
+
+function applyClient(key) {
+    const sc = savedClients[key];
+    clientInput.value = sc.client || key.split('||')[0];
+    document.getElementById('stop-dest').value = sc.dest || '';
+    document.getElementById('f-trips').value = sc.trips || 1;
+    setTripType(sc.tripType || 'round', true);
+    lastMiles = sc.miles;
+    lastRoute = sc.route;
+    const trips = sc.trips || 1;
+    const mult = sc.tripType === 'round' ? 2 : 1;
+    document.getElementById('preview-total-input').value = sc.miles.toFixed(1);
+    document.getElementById('miles-edited-tag').textContent = '← edit if needed';
+    document.getElementById('preview-detail').innerHTML =
+        `One-way: <span class="hi">${(sc.miles / mult / trips).toFixed(1)} mi</span>  ×  ` +
+        `${mult === 2 ? 'round trip' : 'one way'}` +
+        (trips > 1 ? `  ×  <span class="hi">${trips} trips</span>` : '') +
+        `<br>Route: ${sc.route}` +
+        `<br><em style="color:var(--green);font-size:10px">✓ loaded from saved route</em>`;
+    document.getElementById('calc-preview').classList.add('visible');
+    document.getElementById('add-btn').disabled = false;
+    document.getElementById('saved-routes-wrap').style.display = 'none';
+    showStatus('', '');
+}
+
+clientInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        document.getElementById('saved-routes-wrap').style.display = 'none';
+    }
+});
+
+function saveClient(job) { apiSaveClient(job); }
+
+
+
+
+
+// ── Trip type ─────────────────────────────────────────────────────────────────
+function setTripType(t, skipReset) {
+    tripType = t;
+    document.getElementById('tt-round').classList.toggle('active', t === 'round');
+    document.getElementById('tt-one').classList.toggle('active', t === 'one');
+    if (!skipReset) resetCalc();
+}
+
+// ── Stops ─────────────────────────────────────────────────────────────────────
+const LABELS = ['A','B','C','D','E','F'];
+function addStop() {
+    if (extraStops >= 3) return;
+    const destRow = document.getElementById('dest-row');
+    const idx = extraStops;
+    const row = document.createElement('div');
+    row.className = 'stop-row';
+    row.id = 'extra-row-' + idx;
+    row.innerHTML = `
+        <span class="stop-badge">${LABELS[1 + idx]}</span>
+        <input type="text" id="extra-${idx}" placeholder="Intermediate stop">
+        <button class="icon-btn" onclick="removeStop(${idx})">×</button>
+    `;
+    document.getElementById('stops-list').insertBefore(row, destRow);
+    extraStops++;
+    refreshBadges();
+    resetCalc();
+}
+function removeStop(idx) {
+    document.getElementById('extra-row-' + idx)?.remove();
+    extraStops--;
+    refreshBadges();
+    resetCalc();
+}
+function refreshBadges() {
+    const rows = document.querySelectorAll('#stops-list .stop-row');
+    rows.forEach((r, i) => r.querySelector('.stop-badge').textContent = LABELS[i]);
+}
+
+// ── Geocode ───────────────────────────────────────────────────────────────────
+const ALIASES = { 'office': '288 Sanford St, Rochester, NY' };
+
+async function geocode(addr) {
+    const resolved = ALIASES[addr.toLowerCase().trim()] || addr;
+    const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(resolved)}&limit=1`, { headers: {'Accept-Language':'en'} });
+    const d = await r.json();
+    if (!d.length) throw new Error(`Not found: "${addr}"`);
+    return { lat: +d[0].lat, lon: +d[0].lon, label: addr.toLowerCase().trim() === 'office' ? 'Office' : d[0].display_name.split(',').slice(0,2).join(',').trim() };
+}
+
+// ── OSRM ──────────────────────────────────────────────────────────────────────
+async function routeMiles(pts) {
+    const coords = pts.map(p => `${p.lon},${p.lat}`).join(';');
+    const r = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=false`);
+    const d = await r.json();
+    if (d.code !== 'Ok') throw new Error('Routing failed');
+    return d.routes[0].distance * 0.000621371;
+}
+
+// ── Calculate ─────────────────────────────────────────────────────────────────
+async function calcMileage() {
+    const origin = document.getElementById('stop-origin').value.trim();
+    const dest = document.getElementById('stop-dest').value.trim();
+    if (!origin || !dest) { showStatus('Enter origin and destination.', 'error'); return; }
+
+    showStatus('Calculating route…', '');
+    document.getElementById('add-btn').disabled = true;
+    document.getElementById('calc-preview').classList.remove('visible');
+
+    try {
+        const addrs = [origin];
+        for (let i = 0; i < extraStops; i++) {
+            const v = document.getElementById('extra-' + i)?.value.trim();
+            if (v) addrs.push(v);
+        }
+        addrs.push(dest);
+
+        const pts = await Promise.all(addrs.map(geocode));
+        const oneway = await routeMiles(pts);
+        const trips = Math.max(1, parseInt(document.getElementById('f-trips').value) || 1);
+        const mult = tripType === 'round' ? 2 : 1;
+        const total = oneway * mult * trips;
+
+        lastMiles = total;
+        lastRoute = pts.map(p => p.label).join(' → ');
+
+        document.getElementById('preview-total-input').value = total.toFixed(1);
+        document.getElementById('miles-edited-tag').textContent = '';
+        document.getElementById('preview-detail').innerHTML =
+            `One-way: <span class="hi">${oneway.toFixed(1)} mi</span>  ×  ` +
+            `${mult === 2 ? 'round trip' : 'one way'}` +
+            (trips > 1 ? `  ×  <span class="hi">${trips} trips</span>` : '') +
+            `<br>Route: ${pts.map(p=>p.label).join(' → ')}`;
+
+        document.getElementById('calc-preview').classList.add('visible');
+        document.getElementById('add-btn').disabled = false;
+        showStatus('', '');
+    } catch(e) {
+        // Show clean preview for manual entry
+        lastRoute = [
+            document.getElementById('stop-origin').value.trim(),
+            document.getElementById('stop-dest').value.trim()
+        ].filter(Boolean).join(' → ');
+        document.getElementById('preview-total-input').value = '';
+        document.getElementById('miles-edited-tag').textContent = '';
+        document.getElementById('preview-detail').innerHTML =
+            `<span style="color:var(--muted)">Address not found — enter miles above manually.</span>`;
+        document.getElementById('calc-preview').classList.add('visible');
+        document.getElementById('add-btn').disabled = true;
+        showStatus('', '');
+    }
+}
+
+// ── Add job ───────────────────────────────────────────────────────────────────
+function addJob() {
+    const inputMiles = parseFloat(document.getElementById('preview-total-input').value);
+    if (!inputMiles || inputMiles <= 0) return;
+    lastMiles = inputMiles;
+    const trips = Math.max(1, parseInt(document.getElementById('f-trips').value) || 1);
+    const client = document.getElementById('f-client').value.trim() || '—';
+    const dest = document.getElementById('stop-dest').value.trim();
+    const job = {
+        client, date: document.getElementById('f-date').value,
+        dest, route: lastRoute, miles: lastMiles,
+        tripType, trips, notes: document.getElementById('f-notes').value.trim(),
+    };
+    if (client !== '—') apiSaveClient(job);
+    apiAddJob(job);
+    resetForm();
+}
+
+function deleteJob(id) {
+    apiDeleteJob(id);
+}
+
+function clearAll() {
+    if (!jobs.length || !confirm('Clear all jobs?')) return;
+    // Delete all one by one
+    Promise.all(jobs.map(j => fetch(`/api/jobs/${j.id}`, { method: 'DELETE' })))
+        .then(() => { jobs = []; render(); });
+}
+
+function resetForm() {
+    document.getElementById('f-client').value = '';
+    document.getElementById('saved-routes-wrap').style.display = 'none';
+    document.getElementById('saved-routes-select').value = '';
+    document.getElementById('f-notes').value = '';
+    document.getElementById('f-trips').value = '1';
+    document.getElementById('stop-dest').value = '';
+    document.getElementById('stop-origin').value = 'Office';
+    for (let i = 0; i < extraStops; i++) document.getElementById('extra-row-' + i)?.remove();
+    extraStops = 0; refreshBadges();
+    setTripType('round'); resetCalc();
+    document.getElementById('f-date').valueAsDate = new Date();
+}
+
+function resetCalc() {
+    lastMiles = null; lastRoute = null;
+    document.getElementById('calc-preview').classList.remove('visible');
+    document.getElementById('preview-total-input').value = '';
+    document.getElementById('miles-edited-tag').textContent = '';
+    document.getElementById('add-btn').disabled = true;
+    showStatus('', '');
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
+    const tbody = document.getElementById('job-tbody');
+    const table = document.getElementById('job-table');
+    const empty = document.getElementById('empty-log');
+    const totalMi = jobs.reduce((s,j) => s + j.miles, 0);
+    const reimb = totalMi * RATE;
+
+    document.getElementById('stat-miles').textContent = totalMi.toFixed(1);
+    document.getElementById('stat-jobs').textContent = jobs.length;
+    document.getElementById('stat-reimb').textContent = '$' + reimb.toFixed(0);
+    document.getElementById('hdr-miles').textContent = totalMi.toFixed(1);
+    document.getElementById('hdr-jobs').textContent = jobs.length;
+    document.getElementById('log-label').textContent = `JOB LOG — ${jobs.length} ENTRIES`;
+
+    if (!jobs.length) { table.style.display = 'none'; empty.style.display = 'block'; return; }
+    table.style.display = 'table'; empty.style.display = 'none';
+
+    tbody.innerHTML = '';
+    jobs.forEach(j => {
+        const dateStr = j.date ? new Date(j.date + 'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+        const tripLabel = j.tripType === 'round'
+            ? (j.trips > 1 ? `${j.trips}× round` : 'round trip')
+            : (j.trips > 1 ? `${j.trips}× one way` : 'one way');
+        const tagClass = j.tripType === 'round' ? 'trip-tag round' : 'trip-tag oneway';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td data-label="Date">${dateStr}</td>
+            <td data-label="Client" class="td-client">${j.client}<br><span class="${tagClass}">${tripLabel}</span></td>
+            <td data-label="Route" style="font-size:11px;color:var(--dim);max-width:160px">${j.route||'—'}</td>
+            <td data-label="Miles" class="td-miles">${j.miles.toFixed(1)}</td>
+            <td data-label="Notes" style="font-size:12px;color:var(--dim)">${j.notes||'—'}</td>
+            <td data-label="">
+                <button class="edit-btn" onclick="openEditModal(${j.id})" title="Edit">✎</button>
+                <button class="del-btn" onclick="deleteJob(${j.id})">×</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    if (activeTab === 'dashboard') renderDashboard();
+}
+
+// ── CSV ───────────────────────────────────────────────────────────────────────
+function exportCSV() {
+    window.location.href = '/api/export';
+}
+
+function showStatus(msg, type) {
+    const el = document.getElementById('status-bar');
+    el.textContent = msg;
+    el.className = 'status-bar' + (msg ? ' visible' : '') + (type === 'error' ? ' error' : '');
+}
+
+// ── Edit modal ────────────────────────────────────────────────────────────────
+function openEditModal(id) {
+    const j = jobs.find(j => j.id === id);
+    if (!j) return;
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-client').value = j.client || '';
+    document.getElementById('edit-date').value = j.date || '';
+    document.getElementById('edit-miles').value = j.miles?.toFixed(1) || '';
+    document.getElementById('edit-triptype').value = j.tripType || 'round';
+    document.getElementById('edit-trips').value = j.trips || 1;
+    document.getElementById('edit-dest').value = j.dest || '';
+    document.getElementById('edit-notes').value = j.notes || '';
+    document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal() {
+    document.getElementById('edit-modal').classList.remove('open');
+}
+
+function saveEdit() {
+    const id = parseInt(document.getElementById('edit-id').value);
+    const data = {
+        client:   document.getElementById('edit-client').value.trim(),
+        date:     document.getElementById('edit-date').value,
+        miles:    parseFloat(document.getElementById('edit-miles').value),
+        tripType: document.getElementById('edit-triptype').value,
+        trips:    parseInt(document.getElementById('edit-trips').value) || 1,
+        dest:     document.getElementById('edit-dest').value.trim(),
+        notes:    document.getElementById('edit-notes').value.trim(),
+    };
+    const existing = jobs.find(j => j.id === id);
+    if (existing) data.route = existing.route;
+    closeEditModal();
+    apiUpdateJob(id, data);
+    if (data.client && data.client !== '—') apiSaveClient(data);
+}
+
+// Close modal on overlay click
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeEditModal();
+});
+
+function save() { localStorage.setItem('hms-mileage', JSON.stringify(jobs)); }
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+let activeTab = 'log';
+let charts = {};
+
+function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().includes(tab === 'log' ? 'log' : 'dash')));
+    document.getElementById('panel-log').classList.toggle('active', tab === 'log');
+    document.getElementById('panel-dashboard').classList.toggle('active', tab === 'dashboard');
+    if (tab === 'dashboard') renderDashboard();
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+const CHART_DEFAULTS = {
+    color: '#888880',
+    borderColor: 'rgba(255,255,255,0.06)',
+    font: { family: "'Barlow Condensed', sans-serif", size: 11 },
+};
+Chart.defaults.color = CHART_DEFAULTS.color;
+Chart.defaults.font = CHART_DEFAULTS.font;
+
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+
+function renderDashboard() {
+    if (!jobs.length) return;
+
+    const totalMi = jobs.reduce((s,j) => s + j.miles, 0);
+    document.getElementById('d-total-mi').textContent = totalMi.toFixed(1);
+    document.getElementById('d-total-jobs').textContent = jobs.length;
+    document.getElementById('d-avg-mi').textContent = (totalMi / jobs.length).toFixed(1);
+    document.getElementById('d-reimb').textContent = '$' + (totalMi * RATE).toFixed(0);
+
+    // ── Miles by month bar chart ──
+    const byMonth = {};
+    jobs.forEach(j => {
+        if (!j.date) return;
+        const key = j.date.slice(0, 7); // YYYY-MM
+        byMonth[key] = (byMonth[key] || 0) + j.miles;
+    });
+    const monthKeys = Object.keys(byMonth).sort();
+    const monthLabels = monthKeys.map(k => {
+        const [y, m] = k.split('-');
+        return new Date(+y, +m - 1).toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+    });
+
+    destroyChart('monthly');
+    charts['monthly'] = new Chart(document.getElementById('chart-monthly'), {
+        type: 'bar',
+        data: {
+            labels: monthLabels,
+            datasets: [{
+                data: monthKeys.map(k => +byMonth[k].toFixed(1)),
+                backgroundColor: 'rgba(61,158,95,0.7)',
+                borderColor: 'rgba(61,158,95,1)',
+                borderWidth: 1,
+                borderRadius: 2,
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 } } },
+                y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 } } }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        }
+    });
+
+    // ── Trip type doughnut ──
+    const roundMi = jobs.filter(j => j.tripType === 'round').reduce((s,j) => s + j.miles, 0);
+    const oneMi   = jobs.filter(j => j.tripType !== 'round').reduce((s,j) => s + j.miles, 0);
+    destroyChart('triptype');
+    charts['triptype'] = new Chart(document.getElementById('chart-triptype'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Round Trip', 'One Way'],
+            datasets: [{
+                data: [+roundMi.toFixed(1), +oneMi.toFixed(1)],
+                backgroundColor: ['rgba(61,158,95,0.8)', 'rgba(200,146,42,0.7)'],
+                borderColor: ['#3d9e5f', '#c8922a'],
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 14, font: { size: 11 }, color: '#888880' }
+                }
+            },
+            cutout: '65%',
+            responsive: true,
+            maintainAspectRatio: true,
+        }
+    });
+
+    // ── Top clients bar list ──
+    const byClient = {};
+    jobs.forEach(j => { byClient[j.client] = (byClient[j.client] || 0) + j.miles; });
+    const sorted = Object.entries(byClient).sort((a,b) => b[1] - a[1]).slice(0, 8);
+    const maxMi = sorted[0]?.[1] || 1;
+    const list = document.getElementById('top-clients-list');
+    list.innerHTML = '';
+    sorted.forEach(([name, mi]) => {
+        const pct = (mi / maxMi * 100).toFixed(1);
+        list.innerHTML += `
+            <div class="top-client-row">
+                <div class="top-client-name">${name}</div>
+                <div class="top-client-bar-wrap"><div class="top-client-bar" style="width:${pct}%"></div></div>
+                <div class="top-client-miles">${mi.toFixed(1)} mi</div>
+            </div>
+        `;
+    });
+
+    // ── Per-job miles line (recent 20) ──
+    const recent = [...jobs].reverse().slice(-20);
+    destroyChart('perjob');
+    charts['perjob'] = new Chart(document.getElementById('chart-perjob'), {
+        type: 'bar',
+        data: {
+            labels: recent.map(j => j.client.length > 12 ? j.client.slice(0,12)+'…' : j.client),
+            datasets: [{
+                data: recent.map(j => +j.miles.toFixed(1)),
+                backgroundColor: recent.map(() => 'rgba(200,146,42,0.5)'),
+                borderColor: recent.map(() => 'rgba(200,146,42,0.9)'),
+                borderWidth: 1,
+                borderRadius: 2,
+            }]
+        },
+        options: {
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 }, maxRotation: 35 } },
+                y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { font: { size: 10 } } }
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+        }
+    });
+}
+
+// loadFromServer() called above handles initial render
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+{
+  "visits": [
+    {
+      "timestamp": "2026-02-15T19:40:49.589Z",
+      "sessionId": "sid_1771184449512_6ic51nx",
+      "ip": "54.212.224.142",
+      "location": "Boardman, OR, US",
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Edge",
+      "referer": "Direct",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1,
+      "lastHeartbeat": "2026-02-15T19:40:59.551Z",
+      "duration": 9
+    },
+    {
+      "timestamp": "2026-02-15T22:31:27.124Z",
+      "sessionId": "sid_1771194687040_btunbo3",
+      "ip": "147.93.149.142",
+      "location": "BE",
+      "device": "Desktop",
+      "os": "macOS",
+      "browser": "Firefox",
+      "referer": "Direct",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1
+    },
+    {
+      "timestamp": "2026-02-16T04:40:36.729Z",
+      "sessionId": "sid_1771215604773_h8qgw47",
+      "ip": "45.14.195.147",
+      "location": "Buffalo, NY, US",
+      "device": "Desktop",
+      "os": "macOS",
+      "browser": "Firefox",
+      "referer": "Direct",
+      "path": "/livestream/",
+      "pages": [
+        "/livestream/"
+      ],
+      "pageCount": 1,
+      "lastHeartbeat": "2026-02-16T04:40:56.927Z",
+      "duration": 20,
+      "navigations": 2
+    },
+    {
+      "timestamp": "2026-02-16T04:40:57.360Z",
+      "sessionId": "sid_1771215613287_a0xhzd3",
+      "ip": "45.14.195.147",
+      "location": "Buffalo, NY, US",
+      "device": "Desktop",
+      "os": "macOS",
+      "browser": "Firefox",
+      "referer": "https://highlandmediaservices.com/",
+      "path": "/services/",
+      "pages": [
+        "/services/"
+      ],
+      "pageCount": 1,
+      "navigations": 3,
+      "lastHeartbeat": "2026-02-16T04:41:17.979Z",
+      "duration": 20
+    },
+    {
+      "timestamp": "2026-02-16T13:18:36.839Z",
+      "sessionId": "sid_1771247916771_kt7a0si",
+      "ip": "34.6.52.14",
+      "location": "US",
+      "device": "Desktop",
+      "os": "Linux",
+      "browser": "Chrome",
+      "referer": "Direct",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1
+    },
+    {
+      "timestamp": "2026-02-16T18:23:40.946Z",
+      "sessionId": "sid_1771266220902_tg5rz4u",
+      "ip": "74.254.145.135",
+      "location": "Deatsville, AL, US",
+      "device": "Mobile",
+      "os": "macOS",
+      "browser": "Safari",
+      "referer": "Direct",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1,
+      "lastHeartbeat": "2026-02-16T18:24:00.943Z",
+      "duration": 19
+    },
+    {
+      "timestamp": "2026-02-16T18:50:46.998Z",
+      "sessionId": "sid_1771267846842_xe7nmvq",
+      "ip": "34.217.122.69",
+      "location": "Boardman, OR, US",
+      "device": "Mobile",
+      "os": "Android",
+      "browser": "Chrome",
+      "referer": "Direct",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1,
+      "lastHeartbeat": "2026-02-16T18:50:56.882Z",
+      "duration": 9
+    },
+    {
+      "timestamp": "2026-02-17T00:24:34.676Z",
+      "sessionId": "sid_1771287882673_kwfo556",
+      "ip": "175.44.42.90",
+      "location": "CN",
+      "device": "Desktop",
+      "os": "Windows",
+      "browser": "Chrome",
+      "referer": "https://www.jariblog.online/",
+      "path": "/",
+      "pages": [
+        "/"
+      ],
+      "pageCount": 1
+    }
+  ]
+}
