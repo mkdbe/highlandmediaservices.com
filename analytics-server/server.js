@@ -172,6 +172,6 @@ app.get('/analytics', (req, res) => {
     res.sendFile(path.join(__dirname, 'analytics-dashboard.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Highland Media Services analytics running on port ${PORT}`);
 });
